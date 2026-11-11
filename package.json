@@ -1,0 +1,23 @@
+{
+  "name": "pelican-campus-quest",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "predev": "([ -d node_modules/.bin ] || bun install || npm install) && node tools/download-assets.mjs",
+    "dev": "vite --port=3000 --host=0.0.0.0",
+    "prebuild": "([ -d node_modules/.bin ] || bun install || npm install) && node tools/download-assets.mjs",
+    "build": "vite build",
+    "preview": "vite preview --port=3000 --host=0.0.0.0",
+    "prelint": "[ -d node_modules/.bin ] || bun install || npm install",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@google/genai": "^2.4.0",
+    "vite": "^8.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "typescript": "^7.0.2"
+  }
+}

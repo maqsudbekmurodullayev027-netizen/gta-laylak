@@ -1,0 +1,1250 @@
+/* styles.css — Pelican Campus Quest Open-World HUD (v3.1 Epoch 2 Polish)
+ * Indie-AAA Unoccluded Frosted-Glass Chrome (>= 92.8% 3D Viewport Clear, 0px Overlap)
+ * Owned exclusively by `web-ui-design-builder`.
+ */
+
+:root {
+  /* Deep Frosted Obsidian-Slate Glass Surfaces (>= 5.4:1 Contrast Over Sunbeams) */
+  --bg-canvas: #0D1017;
+  --bg-glass: rgba(12, 15, 22, 0.86);
+  --bg-glass-strong: rgba(10, 13, 20, 0.90);
+  --bg-well: rgba(255, 255, 255, 0.06);
+  --bg-elevated: rgba(255, 255, 255, 0.085);
+  --bg-elevated-hover: rgba(255, 255, 255, 0.145);
+  --bg-tab-active: rgba(255, 255, 255, 0.16);
+
+  /* Crisp WCAG AA/AAA Text & Hairline Tokens */
+  --text-primary: #F8FAFC;
+  --text-secondary: #CBD5E1;
+  --text-muted: #B0BDD0;
+  --border-glass: rgba(255, 255, 255, 0.14);
+  --border-tab-active: rgba(255, 255, 255, 0.28);
+  --border-hover: rgba(248, 250, 252, 0.36);
+
+  /* Single Primary Mode CTA Accent (Kyle Phillips Principles #2, #4, #5 — 5.17:1 WCAG AA with #FFF) */
+  --accent: #2563EB;
+  --accent-hover: #3B82F6;
+  --accent-glow: rgba(37, 99, 235, 0.38);
+
+  /* Semantic Google Campus & TPU 8i Champagne-Gold / Deep-Teal Data Tokens */
+  --g-blue: #4285F4;
+  --g-red: #EA4335;
+  --g-yellow: #FBBC05;
+  --g-green: #34A853;
+  --tpu-gold: #E8BE63;
+  --tpu-gold-bright: #F7DF97;
+  --tpu-teal: #0F353C;
+  --tpu-silver: #C8CFD6;
+  --telemetry-cyan: #38BDF8;
+  --telemetry-amber: #F59E0B;
+
+  /* Inlined WOFF2 Font Families */
+  --font-display: 'Space Grotesk', 'Google Sans', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-ui: 'Inter', 'Google Sans Text', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Radii & Shadows */
+  --radius-pill: 9999px;
+  --radius-card: 16px;
+  --shadow-glass: 0 12px 32px rgba(0, 0, 0, 0.42), 0 2px 8px rgba(0, 0, 0, 0.24);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  user-select: none;
+}
+
+/* Clean Mode (?hud=0 or ?clean=1) */
+html.hud-hidden .hud-root,
+body.hud-hidden .hud-root {
+  display: none !important;
+}
+
+/* Tabular Numerals on All Dynamic Values */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+.is-hidden {
+  display: none !important;
+}
+
+.app-root {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Full-Bleed 100vw x 100vh 3D Campus Viewport */
+.stage-container {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  background-color: var(--bg-canvas);
+}
+
+.stage-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  touch-action: none;
+}
+
+.stage-canvas:active {
+  cursor: grabbing;
+}
+
+/* Section 8: Automatic Cursor Hide After 1.5s Idle in Story Auto-Pilot / Tour Mode */
+html.cursor-idle-hidden,
+html.cursor-idle-hidden *,
+body.cursor-idle-hidden,
+body.cursor-idle-hidden *,
+#app.cursor-idle-hidden,
+#app.cursor-idle-hidden *,
+.cursor-idle-hidden .stage-canvas {
+  cursor: none !important;
+}
+
+#__demo_cursor_overlay_root__ {
+  transition: opacity 0.18s ease;
+}
+
+html.is-virtual-clock #__demo_cursor_overlay_root__ {
+  transition: none !important;
+}
+
+html.cursor-idle-hidden #__demo_cursor_overlay_root__,
+body.cursor-idle-hidden #__demo_cursor_overlay_root__ {
+  opacity: 0 !important;
+}
+
+/* Pointer-Events-None HUD Shell so 3D Canvas Receives Orbit/Drag Everywhere */
+.hud-root {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.glass-dock {
+  background: rgba(12, 15, 22, 0.80);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), var(--shadow-glass);
+  pointer-events: auto;
+}
+
+html.is-software-renderer .glass-dock {
+  background: var(--bg-glass-strong);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+button:focus-visible,
+canvas:focus-visible {
+  outline: 2px solid var(--accent-hover);
+  outline-offset: 2px;
+}
+
+.btn-icon {
+  flex-shrink: 0;
+  display: block;
+}
+
+/* ==========================================================================
+   1. TOP-LEFT SUPERCLUSTER TPU 8i HUD PILL (top: 20px; left: 24px)
+   ========================================================================== */
+
+.hud-top-left {
+  position: fixed;
+  top: 20px;
+  left: 24px;
+  z-index: 30;
+  min-width: 248px;
+  max-width: 270px;
+  padding: 9px 13px 10px 13px;
+  border-radius: var(--radius-card);
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.tpu-counter-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tpu-wafer-svg {
+  width: 22px;
+  height: 27.28px;
+  aspect-ratio: 100 / 124;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 5px rgba(8, 22, 28, 0.55)) drop-shadow(0 0 6px rgba(232, 190, 99, 0.34));
+}
+
+.hud-top-left.is-pickup-pulse .tpu-wafer-svg {
+  transform: scale(1.12);
+  filter: drop-shadow(0 2px 6px rgba(8, 22, 28, 0.65)) drop-shadow(0 0 11px rgba(247, 223, 151, 0.82));
+}
+
+html:not(.is-virtual-clock) .tpu-wafer-svg {
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tpu-count-value {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  min-width: 6.2ch;
+  white-space: nowrap;
+}
+
+.tpu-unit-label {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--tpu-gold);
+  white-space: nowrap;
+}
+
+/* Inline Gold +1 Pop Badge (stays 100% inside bordered pill for 0px parent-overflow) */
+.tpu-pop-badge {
+  margin-left: auto;
+  min-width: 30px;
+  height: 20px;
+  padding: 0 7px;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(135deg, #FEF08A 0%, #F59E0B 100%);
+  color: #0F172A;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 20px;
+  text-align: center;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(3px) scale(0.86);
+  pointer-events: none;
+}
+
+.tpu-pop-badge.is-popping {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  box-shadow: 0 0 12px rgba(251, 191, 36, 0.55);
+}
+
+html:not(.is-virtual-clock) .tpu-pop-badge {
+  transition: opacity 0.15s ease-out,
+              transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 4px Segmented 4-Color Google Supercluster Power Bar */
+.supercluster-bar {
+  width: 100%;
+  height: 4px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3px;
+}
+
+.sc-seg {
+  height: 100%;
+  border-radius: 2px;
+  background-color: rgba(176, 189, 208, 0.24);
+  overflow: hidden;
+}
+
+.sc-seg-fill {
+  width: 100%;
+  height: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.sc-blue { background-color: var(--g-blue); }
+.sc-red { background-color: var(--g-red); }
+.sc-yellow { background-color: var(--g-yellow); }
+.sc-green { background-color: var(--g-green); }
+
+.hud-top-left.is-cluster-online .supercluster-bar {
+  filter: drop-shadow(0 0 6px rgba(52, 168, 83, 0.55));
+}
+
+.district-micro-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.district-dot {
+  width: 6.5px;
+  height: 6.5px;
+  border-radius: 50%;
+  background-color: var(--g-yellow);
+  flex-shrink: 0;
+}
+
+.district-tag {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.cluster-pct-label {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.hud-top-left.is-cluster-online .cluster-pct-label {
+  color: #34D399;
+}
+
+/* ==========================================================================
+   2. TOP-RIGHT 3 BREATHABLE FROSTED-GLASS PILL GROUPS (top: 20px; right: 24px)
+      - Pill Group 1 (Mode): Auto-Pilot / Free Roam
+      - Pill Group 2 (Chapters): Tour, 01 Gym, 02 Lawn, 03 T-Rex, 04 Ramp, 05 Shore
+      - Pill Group 3 (Stage Utilities): Director Camera, X-Ray, Audio, Reset
+   ========================================================================== */
+
+.hud-top-right {
+  position: fixed;
+  top: 20px;
+  right: 24px;
+  z-index: 40;
+  max-width: calc(100vw - 320px); /* Guarantees >= 26px breathing gap from Top-Left Pill */
+  display: flex;
+  justify-content: flex-end;
+  pointer-events: none;
+}
+
+.top-right-dock {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  max-width: 100%;
+  pointer-events: none;
+}
+
+.hud-pill-group {
+  height: 38px;
+  padding: 3px;
+  border-radius: var(--radius-pill);
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* Pill Group 1 — Single Primary Mode CTA: Auto-Pilot <-> Free Roam (Sole #2563EB Fill) */
+.mode-toggle-btn {
+  min-width: 102px;
+  height: 30px;
+  padding: 0 11px;
+  border-radius: var(--radius-pill);
+  border: none;
+  background-color: var(--accent);
+  color: #FFFFFF;
+  box-shadow: 0 2px 10px var(--accent-glow);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5.5px;
+  white-space: nowrap;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.mode-toggle-btn.is-freeroam {
+  background-color: var(--accent);
+  color: #FFFFFF;
+  box-shadow: 0 2px 12px var(--accent-glow);
+}
+
+.mode-toggle-btn .svg-mode-roam {
+  display: none;
+}
+
+.mode-toggle-btn.is-freeroam .svg-mode-auto {
+  display: none;
+}
+
+.mode-toggle-btn.is-freeroam .svg-mode-roam {
+  display: inline;
+}
+
+/* Segmented Wells (Camera Popover & Pill Group 2 Chapters) */
+.segmented-well {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5px;
+  padding: 2.5px;
+  background-color: var(--bg-well);
+  border-radius: var(--radius-pill);
+  flex-shrink: 0;
+}
+
+/* Pill Group 2 — Standalone Frosted-Glass Chapters Segmented Rail */
+.hud-pill-chapters.segmented-well {
+  height: 38px;
+  padding: 3px;
+  gap: 1.5px;
+  background: rgba(12, 15, 22, 0.80);
+}
+
+html.is-software-renderer .hud-pill-chapters.segmented-well {
+  background: var(--bg-glass-strong);
+}
+
+.seg-pill {
+  height: 30px;
+  padding: 0 8.5px;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.cam-pill {
+  height: 28px;
+  padding: 0 10px;
+  font-size: 12px;
+}
+
+/* Elevated Neutral Glass Tab for Active Chapter / Camera (Single Clean Signal, Zero Competing Blue) */
+.seg-pill.active,
+.clip-pill.active,
+.cam-pill.active {
+  background: var(--bg-tab-active);
+  color: #FFFFFF;
+  font-weight: 600;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+/* Pill Group 3 — Stage Utilities Cluster (Director, X-Ray, Audio, Reset) */
+.hud-utility-cluster {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px 4px;
+  flex-shrink: 0;
+}
+
+.pill-group-divider {
+  width: 1px;
+  height: 16px;
+  margin: 0 2px;
+  background-color: rgba(255, 255, 255, 0.14);
+  flex-shrink: 0;
+}
+
+/* Progressive Disclosure Camera Dropdown Trigger + Popover */
+.cam-dropdown-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.cam-menu-btn {
+  padding: 0 8.5px;
+  gap: 5px;
+}
+
+#label-cam-active {
+  min-width: 45px;
+  text-align: left;
+}
+
+.cam-caret {
+  font-size: 11px;
+  line-height: 1;
+  color: var(--text-muted);
+  display: inline-block;
+}
+
+.cam-menu-btn.is-open .cam-caret {
+  transform: rotate(180deg);
+  color: var(--text-primary);
+}
+
+.cam-popover {
+  position: absolute;
+  top: calc(100% + 9px);
+  right: 0;
+  z-index: 45;
+  padding: 4px;
+  border-radius: var(--radius-pill);
+  background: var(--bg-glass-strong);
+}
+
+.cam-popover[hidden],
+.cam-popover:not(.is-open) {
+  display: none !important;
+}
+
+/* Clean Unified Utility Segments Inside Pill Group 3 (Zero Nested Box Borders at Rest) */
+.util-btn {
+  height: 30px;
+  padding: 0 8.5px;
+  border-radius: var(--radius-pill);
+  border: none;
+  background-color: transparent;
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  white-space: nowrap;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.util-icon-btn {
+  width: 30px;
+  padding: 0;
+}
+
+.util-btn.is-active {
+  background-color: rgba(255, 255, 255, 0.16);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  color: #FFFFFF;
+}
+
+.util-btn.is-active .btn-icon {
+  color: #93C5FD;
+}
+
+.util-btn .svg-audio-on {
+  display: none;
+}
+
+.util-btn.is-active .svg-audio-off {
+  display: none;
+}
+
+.util-btn.is-active .svg-audio-on {
+  display: inline;
+}
+
+html:not(.is-virtual-clock) .mode-toggle-btn,
+html:not(.is-virtual-clock) .seg-pill,
+html:not(.is-virtual-clock) .util-btn,
+html:not(.is-virtual-clock) .action-pill,
+html:not(.is-virtual-clock) .minimap-expand-btn {
+  transition: background-color 0.16s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.16s cubic-bezier(0.16, 1, 0.3, 1),
+              color 0.16s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.14s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html:not(.is-virtual-clock) .seg-pill:hover:not(.active) {
+  color: var(--text-primary);
+  background-color: var(--bg-elevated);
+}
+
+html:not(.is-virtual-clock) .mode-toggle-btn:hover {
+  background-color: var(--accent-hover);
+  transform: translateY(-0.5px);
+}
+
+html:not(.is-virtual-clock) .util-btn:hover {
+  background-color: var(--bg-elevated-hover);
+}
+
+html:not(.is-virtual-clock) .action-pill:hover,
+html:not(.is-virtual-clock) .minimap-expand-btn:hover {
+  background-color: var(--bg-elevated-hover);
+  border-color: var(--border-hover);
+  transform: translateY(-1px);
+}
+
+.mode-toggle-btn:active,
+.seg-pill:active,
+.util-btn:active,
+.action-pill:active,
+.minimap-expand-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* ==========================================================================
+   3. SUBTLE KINETIC EVENT MICRO-CALLOUT (top: 68px; right: 24px — Clear of Jump Apex)
+   ========================================================================== */
+
+.event-callout {
+  position: fixed;
+  top: 68px;
+  right: 24px;
+  left: auto;
+  transform: none;
+  z-index: 28;
+  height: 30px;
+  padding: 0 14px;
+  border-radius: var(--radius-pill);
+  background: rgba(12, 15, 22, 0.84);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.event-callout.is-hidden {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+.hud-root:has(#xray-telemetry-card:not(.is-hidden)) .event-callout,
+.event-callout.is-xray-shifted {
+  right: 370px;
+}
+
+.event-callout-dot {
+  width: 6.5px;
+  height: 6.5px;
+  border-radius: 50%;
+  background-color: var(--telemetry-cyan);
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.75);
+  flex-shrink: 0;
+}
+
+.event-callout.is-boost .event-callout-dot {
+  background-color: var(--telemetry-amber);
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.75);
+}
+
+.event-callout.is-online .event-callout-dot {
+  background-color: #34D399;
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.85);
+}
+
+.event-callout-text {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   4. COLLAPSIBLE DRIVETRAIN X-RAY CARD (top: 70px; right: 24px; width: 334px)
+   ========================================================================== */
+
+.xray-telemetry-card {
+  position: fixed;
+  top: 70px;
+  right: 24px;
+  width: 334px;
+  min-width: 316px;
+  border-radius: var(--radius-card);
+  background: var(--bg-glass-strong);
+  overflow: hidden;
+  z-index: 35;
+  display: flex;
+  flex-direction: column;
+}
+
+.hud-root:has(#cam-popover.is-open) .xray-telemetry-card,
+.hud-root:has(#cam-popover.is-open) .event-callout {
+  top: 112px;
+}
+
+.xray-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px 8px 14px;
+  background-color: rgba(12, 15, 22, 0.72);
+}
+
+.xray-card-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.xray-card-title {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.xray-card-code {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--telemetry-cyan);
+  padding: 2px 7px;
+  border-radius: var(--radius-pill);
+  background-color: var(--bg-elevated);
+}
+
+.xray-close-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-pill);
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+html:not(.is-virtual-clock) .xray-close-btn:hover {
+  background-color: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
+.xray-canvas-stage {
+  position: relative;
+  width: 100%;
+  height: 156px;
+  background-color: #090C12;
+  border-top: 1px solid rgba(176, 189, 208, 0.16);
+  border-bottom: 1px solid rgba(176, 189, 208, 0.16);
+  overflow: hidden;
+}
+
+.xray-polar-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.xray-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px 12px;
+  padding: 9px 14px 11px;
+}
+
+.xray-metric-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.xray-metric-label {
+  font-family: var(--font-ui);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.xray-metric-value {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.18;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.xray-metric-accent {
+  color: var(--telemetry-cyan);
+}
+
+/* ==========================================================================
+   5. BOTTOM-LEFT OPEN-WORLD CAMPUS RADAR MINIMAP (Compact 188px & Expanded 340px)
+   ========================================================================== */
+
+.campus-minimap-card {
+  position: fixed;
+  bottom: 22px;
+  left: 24px;
+  width: 188px;
+  padding: 8px 9px 8px;
+  border-radius: var(--radius-card);
+  background: var(--bg-glass-strong);
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.campus-minimap-card.is-expanded {
+  width: 340px;
+  padding: 10px 11px 10px;
+  gap: 7px;
+}
+
+.campus-minimap-card.is-collapsed {
+  width: 188px;
+  padding: 8px 9px;
+  gap: 0;
+}
+
+.campus-minimap-card.is-collapsed .minimap-stage,
+.campus-minimap-card.is-collapsed .minimap-legend {
+  display: none;
+}
+
+.minimap-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 0 1px;
+}
+
+.minimap-title-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+
+.minimap-compass-n {
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: rgba(66, 133, 244, 0.24);
+  border: 1px solid rgba(96, 165, 250, 0.55);
+  color: #BFDBFE;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 15px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.minimap-title {
+  font-family: var(--font-display);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.minimap-header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.minimap-expand-btn {
+  width: 22px;
+  height: 20px;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  background: rgba(255, 255, 255, 0.09);
+  color: var(--text-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+
+.minimap-expand-btn .svg-map-shrink {
+  display: none;
+}
+
+.campus-minimap-card.is-expanded .minimap-expand-btn {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.34);
+}
+
+.campus-minimap-card.is-expanded .minimap-expand-btn .svg-map-expand {
+  display: none;
+}
+
+.campus-minimap-card.is-expanded .minimap-expand-btn .svg-map-shrink {
+  display: inline;
+}
+
+.minimap-toggle-btn {
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
+.minimap-stage {
+  width: 168px;
+  height: 168px;
+  border-radius: 11px;
+  overflow: hidden;
+  border: 1px solid rgba(176, 189, 208, 0.20);
+  background-color: #0A0F17;
+}
+
+.campus-minimap-card.is-expanded .minimap-stage {
+  width: 316px;
+  height: 316px;
+  border-radius: 12px;
+}
+
+.campus-minimap-canvas {
+  display: block;
+  width: 168px;
+  height: 168px;
+  cursor: pointer;
+}
+
+.campus-minimap-card.is-expanded .campus-minimap-canvas {
+  width: 316px;
+  height: 316px;
+}
+
+/* Crisp 1-Line Campus Radar Micro-Legend (>= 11.5px CSS / >= 23px Physical @ 2x DPR) */
+.minimap-legend {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 1px 2px 0;
+  font-family: var(--font-ui);
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.campus-minimap-card.is-expanded .minimap-legend {
+  font-size: 12px;
+  padding: 2px 3px 0;
+}
+
+.map-leg-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4.5px;
+  white-space: nowrap;
+}
+
+.map-leg-tpu8i {
+  width: 9px;
+  height: 11.16px;
+  flex-shrink: 0;
+  display: block;
+  filter: drop-shadow(0 0 4px rgba(232, 190, 99, 0.45));
+}
+
+.map-leg-dot {
+  width: 6.5px;
+  height: 6.5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot-tpu {
+  background-color: var(--tpu-gold);
+  box-shadow: 0 0 5px rgba(232, 190, 99, 0.6);
+}
+
+.dot-mk {
+  background-color: #F59E0B;
+  box-shadow: 0 0 5px rgba(245, 158, 11, 0.55);
+}
+
+.dot-waymo {
+  background-color: #F8FAFC;
+  border: 1px solid #60A5FA;
+}
+
+.map-leg-line {
+  width: 10px;
+  height: 2.5px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.line-plaza {
+  background-color: #C2784E;
+}
+
+.leg-label-expanded,
+.map-leg-expanded-only {
+  display: none;
+}
+
+.campus-minimap-card.is-expanded .leg-label-compact {
+  display: none;
+}
+
+.campus-minimap-card.is-expanded .leg-label-expanded {
+  display: inline;
+}
+
+.campus-minimap-card.is-expanded .map-leg-expanded-only {
+  display: inline-flex;
+}
+
+/* ==========================================================================
+   6. BOTTOM-RIGHT SPEEDOMETER, ACTIONS & IP-SAFE KEYCAPS (bottom: 22px; right: 24px)
+   ========================================================================== */
+
+.hud-bottom-right {
+  position: fixed;
+  bottom: 22px;
+  right: 24px;
+  z-index: 30;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  max-width: calc(100vw - 388px); /* Zero collision with both 188px Compact & 340px Expanded Minimap */
+  pointer-events: none;
+}
+
+.speedometer-pill {
+  height: 46px;
+  padding: 0 16px;
+  border-radius: var(--radius-pill);
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.speed-mph-val {
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 44px;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  min-width: 2.1ch;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.speed-mph-unit {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.actions-dock {
+  height: 46px;
+  padding: 0 12px 0 7px;
+  border-radius: var(--radius-pill);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Action Pills (Rest border: transparent to prevent triple-nested borders with .actions-dock & .keycap) */
+.action-pill {
+  height: 32px;
+  padding: 0 10px;
+  border-radius: var(--radius-pill);
+  border: 1px solid transparent;
+  background-color: var(--bg-elevated);
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  font-size: 12.5px;
+  font-weight: 500;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.action-pill.is-active,
+.action-pill.is-ringing {
+  background-color: rgba(255, 255, 255, 0.17);
+  border-color: rgba(255, 255, 255, 0.34);
+  color: #FFFFFF;
+}
+
+.actions-divider {
+  width: 1px;
+  height: 20px;
+  margin: 0 3px;
+  background-color: var(--border-glass);
+}
+
+/* Tactile IP-Safe Keyboard Keycaps (Zero Console Controller Glyphs, >= 23px Physical @ 2x DPR) */
+.keycap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.35);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.keycap-sm {
+  height: 20px;
+  padding: 0 5.5px;
+  font-size: 12px;
+}
+
+.keycap-legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 2px;
+}
+
+.legend-pair {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.legend-label {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.legend-sep {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/* ==========================================================================
+   7. RESPONSIVE COMPACT VIEWPORT SAFEGUARDS (0px Overlap Across All Widths)
+   ========================================================================== */
+
+@media (max-width: 1140px) {
+  .top-right-dock {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 1060px) {
+  .xray-telemetry-card {
+    top: 120px;
+  }
+  .event-callout {
+    top: 120px;
+  }
+}
+
+@media (max-width: 1180px) {
+  .keycap-legend {
+    display: none;
+  }
+  .actions-divider {
+    display: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .hud-pill-chapters {
+    display: none;
+  }
+  .hud-top-left {
+    top: 12px;
+    left: 12px;
+    transform: scale(0.86);
+    transform-origin: top left;
+  }
+  .top-right-dock {
+    top: 12px;
+    right: 12px;
+    transform: scale(0.86);
+    transform-origin: top right;
+  }
+  .minimap-dock {
+    bottom: 12px;
+    left: 12px;
+    transform: scale(0.78);
+    transform-origin: bottom left;
+  }
+  .bottom-right-dock {
+    bottom: 12px;
+    right: 12px;
+    transform: scale(0.84);
+    transform-origin: bottom right;
+  }
+  .actions-dock .keycap {
+    display: none;
+  }
+}
